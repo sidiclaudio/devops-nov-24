@@ -4,17 +4,24 @@ phases:
   install:
     runtime-versions:
       python: 3.9 # IT WILL INSTALL PYTHON 3.9 ON THE ENVIRONMENT
+    commands:
+      - echo === INSTALLING CFN-LINT ===
+      - pip install cfn-lint
     
   pre_build: # CHECK IF YOUR ENV HAS ALL TOOLS
     commands:
       - echo ==== CHECK IF PYTHON AND AWSCLI WAS INSTALLED SUCCESSFULLY ====
       - python3 --version
       - aws --version
+      - echo === CHECK CFN-LINT ===
+      - cfn-lint --version
     
   build: # RUN YOUR CODE
     commands:
-      - echo === RUN YOUR CODE HERE ===
-      - python3 my_app.py # RUN A PYTHON CODE
+      - echo === CHECK FOR SYNTAX ON OUR TEMPLATE ===
+      - cfn-lint 1-ec2-user-data.yaml
+      - echo === BUILD OUR CFN TEMPLATE ===
+      - aws cloudformation package --template-file 1-ec2-user-data.yaml --s3-bucket my-deployed-artifacts-bucket --output-template-file build-artifact-template.yaml
 
   post_build:
     commands:
@@ -23,5 +30,4 @@ phases:
 
 artifacts:
   files:
-    - '**/*' # GRAB EVERYTHING
-  name: my-built-artifact-$(date +%Y-%m-%d)
+    - build-artifact-template.yaml # THE ONLY ARTFIFCAT WE WILL USE FOR NEXT STAGE
