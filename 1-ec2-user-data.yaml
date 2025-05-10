@@ -37,7 +37,7 @@ Resources:
           yum install -y httpd
           systemctl start httpd
           systemctl enable httpd
-          echo "<html><body><h1>AUTOMATION CLASS HITS HARD NEED 2 DAYS in ${AWS::Region}<h1></body></html>" > /var/www/html/index.html
+          echo "<html><body><h1>NOV class is ready for the hmw in ${AWS::Region}<h1></body></html>" > /var/www/html/index.html
 
   WebServerSecurityGroup: #security group ID
     Type: AWS::EC2::SecurityGroup
